@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two behaviors want the wheels — what decides?</title>
+<style>
+  :root{
+    --accent:#9E1B32;          /* UA crimson — the deck's single accent */
+    --accent-soft:#F3E7E9;
+    --ink:#16181A;
+    --ink-2:#4A5054;
+    --ink-3:#7A8287;
+    --line:#E1E0DD;
+    --line-2:#CFCCC7;
+    --paper:#FAFAF9;
+    --grey-fill:#F1F0EE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#2B2F31}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;color:var(--ink)}
+  #deck{position:fixed;inset:0}
+  .slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--paper)}
+  .stage{
+    --u:min(1vw,1.7778vh);
+    width:min(100vw,177.78vh);height:min(56.25vw,100vh);
+    padding:calc(var(--u)*4.6) calc(var(--u)*6.4) calc(var(--u)*3.2);
+    display:flex;flex-direction:column;position:relative;overflow:hidden;
+  }
+
+  /* ---------- masthead ---------- */
+  .kicker{
+    font:600 max(10px,calc(var(--u)*1.0))/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;
+  }
+  h1{font-size:calc(var(--u)*3.25);line-height:1.06;letter-spacing:-.022em;font-weight:600;
+     margin-top:calc(var(--u)*1.35);max-width:calc(var(--u)*78)}
+  .standfirst{font-size:max(14px,calc(var(--u)*1.24));line-height:1.45;color:var(--ink-2);
+     margin-top:calc(var(--u)*1.15)}
+  .rule{display:block;width:calc(var(--u)*6);height:calc(var(--u)*.2);background:var(--accent);
+     margin-top:calc(var(--u)*1.3);flex:none}
+
+  /* ---------- three arbiters ---------- */
+  .arb{display:grid;grid-template-columns:1fr 1fr 1fr;gap:calc(var(--u)*3.4);
+     margin-top:calc(var(--u)*1.9);min-height:0}
+  .card{display:flex;flex-direction:column;border-top:1px solid var(--line);
+     padding-top:calc(var(--u)*1.3);min-width:0}
+  .lbl{font:600 max(10px,calc(var(--u)*.98))/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+  .lbl b{color:var(--accent)}
+  .fig{margin:calc(var(--u)*1.0) 0 calc(var(--u)*.7)}
+  svg{display:block;width:100%;height:auto}
+  .mech{font-size:max(14px,calc(var(--u)*1.3));font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .cap{font-size:max(12px,calc(var(--u)*.99));line-height:1.42;color:var(--ink-3);
+     margin-top:calc(var(--u)*.55)}
+
+  /* ---------- bottom band + footer ---------- */
+  .band{margin-top:auto;display:flex;align-items:baseline;gap:calc(var(--u)*2.2);
+     border-top:1px solid var(--ink);padding-top:calc(var(--u)*1.35);flex:none}
+  .band .q{font:600 max(10px,calc(var(--u)*.98))/1 ui-monospace,monospace;letter-spacing:.2em;
+     text-transform:uppercase;color:var(--accent);flex:none}
+  .band p{font-size:max(13.5px,calc(var(--u)*1.24));line-height:1.3;color:var(--ink)}
+  .band p i{font-style:italic}
+  .band p span{color:var(--ink-3)}
+  .foot{display:flex;justify-content:space-between;align-items:baseline;
+     margin-top:calc(var(--u)*1.2);font:600 max(9px,calc(var(--u)*.9))/1 ui-monospace,monospace;
+     letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);flex:none}
+
+  @page{size:10in 5.625in;margin:0}
+  @media print{
+    html,body{height:auto;overflow:visible;background:#fff}
+    #deck{position:static}
+    .slide{position:relative;inset:auto;width:10in;height:5.625in;
+      page-break-after:always;break-after:page;overflow:hidden}
+    .slide:last-of-type{page-break-after:auto;break-after:auto}
+    .stage{--u:.1in;width:10in;height:5.625in}
+  }
+</style>
+</head>
+<body>
+<div id="deck">
+<section class="slide active">
+  <div class="stage">
+
+    <span class="kicker">Arbitration &middot; robot control architectures</span>
+    <h1>Two behaviors want the wheels. What decides?</h1>
+    <p class="standfirst">Every architecture answers the same question &mdash; only the <em>rule</em> differs.</p>
+    <span class="rule"></span>
+
+    <div class="arb">
+
+      <!-- 01 SUBSUMPTION -->
+      <div class="card">
+        <span class="lbl"><b>01</b> &middot; subsumption</span>
+        <div class="fig">
+        <svg viewBox="0 0 320 140" role="img" aria-label="Subsumption: the higher layer inhibits the lower layer on a shared output bus">
+          <rect x="6" y="14" width="146" height="40" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="79" y="40" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" letter-spacing="1.4" fill="var(--accent)">L1 · AVOID</text>
+
+          <rect x="6" y="82" width="146" height="40" rx="3" fill="var(--grey-fill)" stroke="var(--line-2)" stroke-width="1.5"/>
+          <text x="79" y="108" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" letter-spacing="1.4" fill="var(--ink-3)">L0 · EXPLORE</text>
+
+          <!-- L1 writes to bus: solid accent -->
+          <path d="M152 34 H 234" stroke="var(--accent)" stroke-width="2.6" fill="none"/>
+          <!-- L0 writes to bus: dashed, inhibited -->
+          <path d="M152 102 H 234" stroke="var(--line-2)" stroke-width="2.6" stroke-dasharray="7 5" fill="none"/>
+          <!-- inhibitory synapse on the L0 line -->
+          <circle cx="196" cy="102" r="4.2" fill="var(--grey-fill)" stroke="var(--ink-3)" stroke-width="1.4"/>
+          <path d="M196 94 V 87" stroke="var(--ink-3)" stroke-width="1.8" fill="none"/>
+          <path d="M192.4 82.6 L196 88 L199.6 82.6" stroke="var(--ink-3)" stroke-width="1.8" fill="none"/>
+
+          <!-- output bus -->
+          <path d="M234 22 V 114" stroke="var(--ink)" stroke-width="2.2" fill="none"/>
+          <circle cx="234" cy="34" r="3.4" fill="var(--accent)"/>
+          <circle cx="234" cy="102" r="3.4" fill="var(--line-2)"/>
+          <path d="M234 68 H 302" stroke="var(--ink)" stroke-width="2.6" fill="none"/>
+          <path d="M295 63 L 303 68 L 295 73" fill="var(--ink)"/>
+          <text x="302" y="57" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="11.5" font-weight="700" letter-spacing="1.3" fill="var(--ink)">WHEELS</text>
+        </svg>
+        </div>
+        <span class="mech">Fixed priority</span>
+        <p class="cap">A higher layer suppresses a lower one. The winner is set <em>before</em> runtime; the loser is inhibited on the bus, not blended.</p>
+      </div>
+
+      <!-- 02 MOTOR SCHEMAS -->
+      <div class="card">
+        <span class="lbl"><b>02</b> &middot; motor schemas</span>
+        <div class="fig">
+        <svg viewBox="0 0 320 140" role="img" aria-label="Motor schemas: two velocity vectors add to one resultant">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/>
+            </marker>
+            <marker id="ahg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--line-2)"/>
+            </marker>
+            <marker id="aha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
+            </marker>
+          </defs>
+
+          <!-- parallelogram guides -->
+          <path d="M198 76 L 254 8" stroke="var(--line-2)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
+          <path d="M126 50 L 254 8" stroke="var(--line-2)" stroke-width="1.5" stroke-dasharray="5 5" fill="none"/>
+
+          <!-- v1 : go to goal (accent) -->
+          <path d="M70 120 L 192 76" stroke="var(--accent)" stroke-width="3" fill="none" marker-end="url(#aha)"/>
+          <!-- v2 : avoid (grey) -->
+          <path d="M70 120 L 120 50" stroke="var(--line-2)" stroke-width="3" fill="none" marker-end="url(#ahg)"/>
+          <!-- resultant -->
+          <path d="M70 120 L 248 14" stroke="var(--ink)" stroke-width="3.4" fill="none" marker-end="url(#ah)"/>
+          <circle cx="70" cy="120" r="3.6" fill="var(--ink)"/>
+
+          <text x="62" y="136" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="700" letter-spacing="1" fill="var(--accent)">go to goal</text>
+          <text x="96" y="42" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="700" letter-spacing="1" fill="var(--ink-3)">avoid</text>
+          <text x="316" y="40" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="700" letter-spacing="1" fill="var(--ink)">Σ resultant</text>
+        </svg>
+        </div>
+        <span class="mech">Vector sum</span>
+        <p class="cap">Both behaviors keep talking every tick. The wheels receive their sum, so conflict is averaged into one blended command.</p>
+      </div>
+
+      <!-- 03 BEHAVIOR TREES -->
+      <div class="card">
+        <span class="lbl"><b>03</b> &middot; behavior trees</span>
+        <div class="fig">
+        <svg viewBox="0 0 320 140" role="img" aria-label="Behavior tree: a Parallel node whose success threshold decides the winner">
+          <rect x="76" y="6" width="168" height="42" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="160" y="24" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" letter-spacing="1.7" fill="var(--accent)">PARALLEL</text>
+          <text x="160" y="41" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="10.5" letter-spacing=".6" fill="var(--ink-2)">policy: ≥ 1 success</text>
+
+          <path d="M160 48 V 70" stroke="var(--ink-3)" stroke-width="1.6" fill="none"/>
+          <path d="M82 70 H 238" stroke="var(--ink-3)" stroke-width="1.6" fill="none"/>
+          <path d="M82 70 V 92" stroke="var(--accent)" stroke-width="1.8" fill="none"/>
+          <path d="M78 87.5 L 82 94 L 86 87.5" fill="var(--accent)"/>
+          <path d="M238 70 V 92" stroke="var(--line-2)" stroke-width="1.8" fill="none"/>
+          <path d="M234 87.5 L 238 94 L 242 87.5" fill="var(--line-2)"/>
+
+          <rect x="16" y="96" width="132" height="38" rx="3" fill="#fff" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="82" y="120" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="700" letter-spacing="1.3" fill="var(--accent)">AVOID · SUCCESS</text>
+          <rect x="172" y="96" width="132" height="38" rx="3" fill="var(--grey-fill)" stroke="var(--line-2)" stroke-width="1.6"/>
+          <text x="238" y="120" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="12" font-weight="700" letter-spacing="1.3" fill="var(--ink-3)">EXPLORE · RUNNING</text>
+        </svg>
+        </div>
+        <span class="mech">Explicit threshold</span>
+        <p class="cap">The rule lives in the tree as data &mdash; how many children must succeed. Arbitration becomes a value you can edit, not buried wiring.</p>
+      </div>
+
+    </div>
+
+    <div class="band">
+      <span class="q">the point</span>
+      <p>Arbitration <i>is</i> the parallelism story: wear it as <b>priority</b>, <b>summation</b>, or an explicit <b>policy</b>
+         <span>&mdash; and you have answered who gets the actuators.</span></p>
+    </div>
+    <div class="foot">
+      <span>Robot control architectures</span>
+      <span>Parallelism &amp; modularity</span>
+    </div>
+
+  </div>
+</section>
+</div>
+</body>
+</html>
